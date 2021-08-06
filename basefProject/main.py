@@ -1,4 +1,4 @@
-#Description: This model classifies phrases as 1 (indicative of emotional distress) or 0 
+#Description: This model classifies phrases as 1 (indicative of emotional distress) or 0 (other)
 
 #Import libraries
 import sklearn
