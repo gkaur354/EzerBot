@@ -10,8 +10,6 @@ from nltk.corpus import stopwords
 import scipy
 import pickle
 
-from spellchecker import SpellChecker
-
 from tensorflow.keras.layers import Dense, LSTM, Embedding
 from tensorflow.keras.models import Model
 from tensorflow.keras.models import Sequential
