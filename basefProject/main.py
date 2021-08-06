@@ -10,6 +10,8 @@ from nltk.corpus import stopwords
 import scipy
 import pickle
 
+from spellchecker import SpellChecker
+
 from tensorflow.keras.layers import Dense, LSTM, Embedding
 from tensorflow.keras.models import Model
 from tensorflow.keras.models import Sequential
@@ -81,7 +83,7 @@ y = data['intention']
 from sklearn.model_selection import train_test_split
 X_train, X_test, Y_train, Y_test = train_test_split(X,y, test_size = 0.2, random_state = 0)
 
-#Covert to integer array
+#Covert to array
 from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 
