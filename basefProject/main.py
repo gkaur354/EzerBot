@@ -22,7 +22,7 @@ data = pd.read_csv("/Users/gurnirmalkaur/Desktop/Data.csv")
 #List of stopwords
 stop_words = stopwords.words('english')
 
-#Remove I, me, myself, and my from stop words because they provide important information
+#Remove I, me, myself, and my from stop words 
 last_index = len(stop_words) - 1
 stopWords = stop_words[4:last_index]
 
@@ -35,7 +35,7 @@ with open('stopwords_pickle', 'wb') as f:
 #Convert to lower case
 data['phrase'] = data['phrase'].apply(lambda x: x.lower())
 
-#Remove punctuation and numbers 
+#Remove punctuation and numbers from text
 def only_letters(text):
     import re
     pattern = r'[0-9]'
@@ -75,9 +75,6 @@ def create_corpus(data):
 
 corpus = create_corpus(data)
 
-#Max phrase length
-maximum = 50
-
 #Spit data into train and test 
 X = data['phrase']
 y = data['intention']
@@ -98,6 +95,7 @@ with open('tokenizer.pickle', 'wb') as handle:
 train_sequences = tokenizer.texts_to_sequences(X_train)
 
 #Pad train sequences 
+maximum = 50
 padded_train = pad_sequences(train_sequences, maxlen=maximum, truncating='post', padding='post')
 
 #Pad test sequences
@@ -137,6 +135,6 @@ model.compile(loss="binary_crossentropy", optimizer=optimizer, metrics=['accurac
 from keras import callbacks
 earlystopping = callbacks.EarlyStopping(monitor="val_loss",mode="min",patience=5, restore_best_weights=True)
 
-hist = model.fit(padded_train,Y_train, epochs=90, validation_data=(padded_test, Y_test),callbacks =[earlystopping],verbose=1)
+hist = model.fit(padded_train,Y_train, epochs=90, validation_data=(padded_test, Y_test),callbacks=[earlystopping],verbose=1)
 model.save('chatbotmodel.h5', hist)
 
