@@ -113,7 +113,6 @@ with open("/Users/gurnirmalkaur/Desktop/glove.6B.100d.txt", "r") as f:
         vectors = np.asarray(values[1:])
         glove_vectors[word] = vectors
 
-#Get vectors for words in data
 num_words = len(word_index) + 1
 embedding_matrix = np.zeros((num_words, 100))
 
