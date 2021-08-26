@@ -17,7 +17,7 @@ from tensorflow.keras.initializers import Constant
 from tensorflow.keras.optimizers import Adam
 
 #load the data 
-data = pd.read_csv("/Users/gurnirmalkaur/Desktop/Data.csv")
+data = pd.read_csv("/Users/gurnirmalkaur/Desktop/BasefDataCSV.csv")
 
 #List of stopwords
 stop_words = stopwords.words('english')
