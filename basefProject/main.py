@@ -49,7 +49,9 @@ def only_letters(text):
 
 data['phrase'] = data['phrase'].apply(lambda x:only_letters(x))
 
-print(data.shape)
+#Count of 0 and 1 
+counts = data['intention'].value_counts()
+
 #Remove stopwords from text
 def remove_stopwords(text):
     phrase = nltk.word_tokenize(text)
