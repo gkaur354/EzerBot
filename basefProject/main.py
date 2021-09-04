@@ -17,7 +17,7 @@ from tensorflow.keras.initializers import Constant
 from tensorflow.keras.optimizers import Adam
 
 #load the data 
-data = pd.read_csv("/Users/gurnirmalkaur/Desktop/BasefDatatempcsv.csv")
+data = pd.read_csv("/Users/gurnirmalkaur/Desktop/BasefDataCURRENT.csv")
 
 #List of stopwords
 stop_words = stopwords.words('english')
@@ -51,6 +51,7 @@ data['phrase'] = data['phrase'].apply(lambda x:only_letters(x))
 
 #Count of 0 and 1 
 counts = data['intention'].value_counts()
+print(counts)
 
 #Remove stopwords from text
 def remove_stopwords(text):
@@ -78,7 +79,6 @@ def create_corpus(data):
 
 corpus = create_corpus(data)
 
-"""
 #Spit data into train and test 
 X = data['phrase']
 y = data['intention']
@@ -140,4 +140,4 @@ earlystopping = callbacks.EarlyStopping(monitor="val_loss",mode="min",patience=5
 
 hist = model.fit(padded_train,Y_train, epochs=90, validation_data=(padded_test, Y_test),callbacks=[earlystopping],verbose=1)
 model.save('chatbotmodel.h5', hist)
-"""
+
