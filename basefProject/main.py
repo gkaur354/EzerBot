@@ -1,4 +1,5 @@
-#Description: This model classifies phrases as 1 (indicative of emotional distress) or 0 (other)
+#Description: This model classifies phrases as 1 (indicative of emotional distress -- for example: suicidal
+#ideation, depression, anxiety, etc.) or 0 (other)
 
 #Import libraries
 import sklearn
@@ -19,12 +20,17 @@ from tensorflow.keras.optimizers import Adam
 #load the data 
 data = pd.read_csv("/Users/gurnirmalkaur/Desktop/BasefDataCURRENT.csv")
 
+#Count of 0 and 1 in labeled dataset
+counts = data['intention'].value_counts()
+print(counts)
+
 #List of stopwords
 stop_words = stopwords.words('english')
 
-#Remove I, me, myself, and my from stop words 
+#Remove personal pronouns from stop words because they provide important information in this case
 last_index = len(stop_words) - 1
-stopWords = stop_words[4:last_index]
+stopWords = stop_words[26:29]
+stopWords.extend(stop_words[35:last_index])
 
 #Save list of stopwords
 with open('stopwords_pickle', 'wb') as f:
@@ -48,10 +54,6 @@ def only_letters(text):
     return final
 
 data['phrase'] = data['phrase'].apply(lambda x:only_letters(x))
-
-#Count of 0 and 1 
-counts = data['intention'].value_counts()
-print(counts)
 
 #Remove stopwords from text
 def remove_stopwords(text):
@@ -128,7 +130,7 @@ for word, i in word_index.items():
 
 #Create model with GloVe
 model = Sequential()
-model.add(Embedding(num_words,100,embeddings_initializer=Constant(embedding_matrix), input_length=maximum, trainable=False))
+model.add(Embedding(num_words,100,embeddings_initializer=Constant(embedding_matrix),input_length=maximum,trainable=False))
 model.add(LSTM(100, dropout=0.1))
 model.add(Dense(1, activation="sigmoid"))
 optimizer = Adam(learning_rate=3e-4)
@@ -138,6 +140,6 @@ model.compile(loss="binary_crossentropy", optimizer=optimizer, metrics=['accurac
 from keras import callbacks
 earlystopping = callbacks.EarlyStopping(monitor="val_loss",mode="min",patience=5, restore_best_weights=True)
 
-hist = model.fit(padded_train,Y_train, epochs=90, validation_data=(padded_test, Y_test),callbacks=[earlystopping],verbose=1)
+hist = model.fit(padded_train,Y_train, epochs=100, validation_data=(padded_test, Y_test),callbacks=[earlystopping],verbose=1)
 model.save('chatbotmodel.h5', hist)
 
