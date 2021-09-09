@@ -1,5 +1,5 @@
 #Description: This model classifies phrases as 1 (indicative of emotional distress -- for example: suicidal
-#ideation, depression, anxiety, etc.) or 0 (other)
+#ideation, depression, anxiety, etc) or 0 (other)
 
 #Import libraries
 import sklearn
