@@ -18,7 +18,8 @@ from tensorflow.keras.initializers import Constant
 from tensorflow.keras.optimizers import Adam
 
 #load the data 
-data = pd.read_csv("/Users/gurnirmalkaur/Desktop/BasefDataCURRENT.csv")
+data = pd.read_csv("/Users/gurnirmalkaur/Desktop/BasefDatasetcsv.csv")
+print(data.head())
 
 #Count of 0 and 1 in labeled dataset
 counts = data['intention'].value_counts()
