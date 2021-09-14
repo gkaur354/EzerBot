@@ -29,8 +29,9 @@ stop_words = stopwords.words('english')
 
 #Remove personal pronouns from stop words because they provide important information in this case
 last_index = len(stop_words) - 1
-stopWords = stop_words[26:29]
-stopWords.extend(stop_words[35:last_index])
+stopWords = stop_words[4:last_index]
+#stopWords = stop_words[26:29]
+#stopWords.extend(stop_words[35:last_index])
 
 #Save list of stopwords
 with open('stopwords_pickle', 'wb') as f:
