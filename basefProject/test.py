@@ -9,4 +9,4 @@ stopWords.extend(stop_words[35:last_index])
 last_index = len(stop_words) - 1
 stopWords = stop_words[4:last_index]
 
-print(stopWords)
+print(stop_words)

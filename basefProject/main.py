@@ -27,7 +27,7 @@ print(counts)
 #List of stopwords
 stop_words = stopwords.words('english')
 
-#Remove personal pronouns from stop words because they provide important information in this case
+#Remove I, me, my and myself from stopwords because they provide important information 
 last_index = len(stop_words) - 1
 stopWords = stop_words[4:last_index]
 #stopWords = stop_words[26:29]
@@ -38,10 +38,6 @@ with open('stopwords_pickle', 'wb') as f:
     pickle.dump(stopWords,f)
 
 #Data preprocessing:
-
-#Convert to lower case
-data['phrase'] = data['phrase'].apply(lambda x: x.lower())
-
 #Remove punctuation and numbers from text
 def only_letters(text):
     import re
@@ -55,6 +51,9 @@ def only_letters(text):
     return final
 
 data['phrase'] = data['phrase'].apply(lambda x:only_letters(x))
+
+#Convert to lower case
+data['phrase'] = data['phrase'].apply(lambda x: x.lower())
 
 #Remove stopwords from text
 def remove_stopwords(text):
