@@ -18,7 +18,7 @@ from tensorflow.keras.initializers import Constant
 from tensorflow.keras.optimizers import Adam
 
 #load the data 
-data = pd.read_csv("/Users/gurnirmalkaur/Desktop/BasefDataset.csv")
+data = pd.read_csv("/Users/gurnirmalkaur/Desktop/basef-dataset.csv")
 print(data.head())
 
 #Count of 0 and 1 in labeled dataset
@@ -141,10 +141,10 @@ optimizer = Adam(learning_rate=3e-4)
 
 model.compile(loss="binary_crossentropy", optimizer=optimizer, metrics=['accuracy'])
 
-from keras import callbacks
-earlystopping = callbacks.EarlyStopping(monitor="val_loss",mode="min",patience=5, restore_best_weights=True)
+#from keras import callbacks
+#earlystopping = callbacks.EarlyStopping(monitor="val_loss",mode="min",patience=5, restore_best_weights=True)
 
-hist = model.fit(padded_train,Y_train, epochs=30, validation_data=(padded_test, Y_test),callbacks=[earlystopping],verbose=1)
+hist = model.fit(padded_train,Y_train, epochs=40, validation_data=(padded_test, Y_test),verbose=1)
 model.save('chatbotmodel.h5', hist)
 
 #87%
