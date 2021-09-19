@@ -11,7 +11,7 @@ from nltk.corpus import stopwords
 import scipy
 import pickle
 
-from tensorflow.keras.layers import Dense, LSTM, Embedding
+from tensorflow.keras.layers import Dense, LSTM, Embedding, Bidirectional, SpatialDropout1D
 from tensorflow.keras.models import Model
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.initializers import Constant
@@ -132,8 +132,11 @@ for word, i in word_index.items():
 #Create model with GloVe
 model = Sequential()
 model.add(Embedding(num_words,100,embeddings_initializer=Constant(embedding_matrix),input_length=maximum,trainable=False))
-model.add(LSTM(100, dropout=0.1))
-model.add(Dense(1, activation="sigmoid"))
+model.add(SpatialDropout1D(0.3))
+model.add(Bidirectional(LSTM(100, dropout=0.01)))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(32, activation='relu'))
+model.add(Dense(1, activation='sigmoid'))
 optimizer = Adam(learning_rate=3e-4)
 
 model.compile(loss="binary_crossentropy", optimizer=optimizer, metrics=['accuracy'])
@@ -141,6 +144,8 @@ model.compile(loss="binary_crossentropy", optimizer=optimizer, metrics=['accurac
 from keras import callbacks
 earlystopping = callbacks.EarlyStopping(monitor="val_loss",mode="min",patience=5, restore_best_weights=True)
 
-hist = model.fit(padded_train,Y_train, epochs=100, validation_data=(padded_test, Y_test),callbacks=[earlystopping],verbose=1)
+hist = model.fit(padded_train,Y_train, epochs=30, validation_data=(padded_test, Y_test),callbacks=[earlystopping],verbose=1)
 model.save('chatbotmodel.h5', hist)
+
+#87%
 
