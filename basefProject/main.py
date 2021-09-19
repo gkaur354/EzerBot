@@ -18,7 +18,7 @@ from tensorflow.keras.initializers import Constant
 from tensorflow.keras.optimizers import Adam
 
 #load the data 
-data = pd.read_csv("/Users/gurnirmalkaur/Desktop/BasefDatasetcsv.csv")
+data = pd.read_csv("/Users/gurnirmalkaur/Desktop/BasefDataset.csv")
 print(data.head())
 
 #Count of 0 and 1 in labeled dataset
