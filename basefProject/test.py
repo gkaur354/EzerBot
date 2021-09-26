@@ -24,8 +24,16 @@ with open('/Users/gurnirmalkaur/Desktop/canadaCities.csv', "r") as csvfile:
 import difflib
 city_names = list(cities.keys())
 
-response = "brantford"
-print(difflib.get_close_matches(response, city_names))
+user_response = "brantfrd"
+response = user_response.capitalize()
 
 #check if in list
 #check if close match
+
+if any(response in cities for response in city_names):
+    print(response)
+
+else:
+    matches = difflib.get_close_matches(response, city_names)
+    closest_match = difflib.get_close_matches(response, matches)
+    print("Did you mean ", closest_match, "?")
