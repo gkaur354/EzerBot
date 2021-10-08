@@ -10,6 +10,21 @@ from nltk.tokenize import word_tokenize
 import re
 from string import punctuation
 
+import csv
+import collections
+from types import CoroutineType
+from typing import DefaultDict
+import difflib
+
+#List of cities in Canada 
+cities = DefaultDict(list)
+with open('/Users/gurnirmalkaur/Desktop/canadaCities.csv', "r") as csvfile:
+    reader = csv.reader(csvfile)
+    for row in reader:
+        city = row[1]
+        province = row[0]
+        cities[city].append(province)
+
 #Bot login 
 client = discord.Client()
 token = "ODcyOTE5MDc1OTM0ODMwNTkz.YQw3PQ.chMozVGpCcxhK8NHKGlLxhpCkWI"
@@ -57,6 +72,16 @@ def classifyMessage(input):
         msg = "0"
     return msg
 
+#Function that corrects spelling of city 
+def correct_spelling(user_response):
+    city_names = list(cities.keys())
+    response = user_response.capitalize()
+    if city_names.count(response):
+        print(response)
+    else:
+        matches = difflib.get_close_matches(response, city_names)
+        print("Did you mean",matches[0],"?")
+
 #Connect to Discord bot 
 while True:
     @client.event
@@ -73,5 +98,6 @@ while True:
 
             
     client.run(token)
+
 
 
