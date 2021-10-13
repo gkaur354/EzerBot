@@ -34,7 +34,7 @@ stopWords = stop_words[4:last_index]
 #stopWords = stop_words[26:29]
 #stopWords.extend(stop_words[35:last_index])
 
-#Save list of stopwords
+
 with open('stopwords_pickle', 'wb') as f:
     pickle.dump(stopWords,f)
 
