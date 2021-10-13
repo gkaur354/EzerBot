@@ -30,15 +30,14 @@ with open('/Users/gurnirmalkaur/Desktop/canadaCities.csv', "r") as csvfile:
 client = discord.Client()
 token = "ODcyOTE5MDc1OTM0ODMwNTkz.YQw3PQ.chMozVGpCcxhK8NHKGlLxhpCkWI"
 
-#Load model and tokenizer
-model = load_model('chatbotmodel.h5')
 
+model = load_model('chatbotmodel.h5')
 with open('tokenizer.pickle', 'rb') as handle:
     tokenizer = pickle.load(handle)
-
-#Function that removes stopwords
 with open("stopwords_pickle", "rb") as f:
     stopwords_list = pickle.load(f)
+
+
 def remove_stopwords(phrase):
     noStopwords = ""
     tokenized_phrase = word_tokenize(phrase)
