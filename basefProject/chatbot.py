@@ -129,7 +129,7 @@ while True:
             if res[0][0] == 1:
                 reply = ""
                 await user.send(check_type(reply))
-                #see user reply
+                #see user reply (client.wait_for)
             
     client.run(token)
 
