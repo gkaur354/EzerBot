@@ -66,11 +66,14 @@ def classifyMessage(input):
     padded = pad_sequences(phrase, maxlen=50, truncating='post', padding='post')
     pred = model.predict(padded)
     pred_int = pred.round().astype("int")
-    if pred_int == 1:
-        msg = "1"
-    else:
-        msg = "0"
-    return msg
+
+    return pred_int
+
+def check_type(reply): 
+    if reply == "":
+        response = "distress"
+        
+    return response 
 
 #Function that corrects spelling of city 
 def correct_spelling(user_response):
@@ -121,10 +124,12 @@ while True:
         if message.author == client.user:
             return 
         else:
+            user = message.author
             res = classifyMessage(message.content)
-            if res != "":
-                await message.reply(res)
-
+            if res[0][0] == 1:
+                reply = ""
+                await user.send(check_type(reply))
+                #see user reply
             
     client.run(token)
 
