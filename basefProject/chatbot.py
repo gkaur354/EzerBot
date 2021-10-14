@@ -69,11 +69,6 @@ def classifyMessage(input):
 
     return pred_int
 
-def check_type(reply): 
-    if reply == "":
-        response = "distress"
-        
-    return response 
 
 #Function that corrects spelling of city 
 def correct_spelling(user_response):
@@ -127,8 +122,7 @@ while True:
             user = message.author
             res = classifyMessage(message.content)
             if res[0][0] == 1:
-                reply = ""
-                await user.send(check_type(reply))
+                await message.reply("")
                 #see user reply (client.wait_for)
             
     client.run(token)
