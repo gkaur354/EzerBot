@@ -123,7 +123,13 @@ while True:
             res = classifyMessage(message.content)
             if res[0][0] == 1:
                 await message.reply("")
-                #see user reply (client.wait_for)
+                """
+                msg = await client.wait_for("message", check=lambda m: m.author == user)
+                await msg.reply("")
+                response = await client.wait_for("message", check=lambda m: m.author == user)
+                await response.reply("")
+                """
+              
             
     client.run(token)
 
