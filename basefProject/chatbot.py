@@ -75,19 +75,20 @@ def correct_spelling(user_response):
     city_names = list(cities.keys())
     response = user_response.capitalize()
     if city_names.count(response):
-        print(response)
+        return response 
     else:
         matches = difflib.get_close_matches(response, city_names)
-        print("Did you mean",matches[0],"?")
+        return matches[0]
 
 #Function that finds resources in the user's vicinity using Yelp's API
-location = "Brantford, Ontario"
-category = "c_and_mh"
-term = "mental health"
+
 url = 'https://api.yelp.com/v3/businesses/search'
 key = open(r'/Users/gurnirmalkaur/Desktop/key.txt').readlines()[0]
 
-def find_resource(location):
+def find_resource(city):
+    location = correct_spelling(str(city))
+    category = "c_and_mh"
+    term = "mental health"
     resources = ""
     headers = {
     'Authorization': 'Bearer %s' % key
@@ -95,10 +96,11 @@ def find_resource(location):
     parameters = {'location': location,
                 'categories': category,
                 'term': term,
-                'limit': 3}
+                'limit': 5}
     response = requests.get(url, headers=headers, params=parameters)
     resource = response.json()['businesses']
 
+    resources = "Here are some mental health resources in your area that you may find helpful:\n"
     for r in resource:
         name = r['name']
         location = r['location']['address1']
@@ -107,6 +109,24 @@ def find_resource(location):
         resource = (f'{name}, {location}, {city}, {province}\n')
         resources += resource 
     return resources
+
+def check_answer1(msg):
+    if msg.lower() == "y":
+        reply = "add resources"
+    elif msg.lower() == "n":
+        reply = "ask about anxiety/depression (Y/N)"
+    else:
+        reply = "Sorry, I don't understand"
+    return reply
+
+def check_answer2(response):
+    if response.lower() == "y":
+        reply = "ask city"
+    elif response.lower() == "n":
+        reply = "somethign"
+    else:
+        reply = "Sorry, I don't understand"
+    return reply
 
 
 #Connect to Discord bot 
@@ -122,15 +142,14 @@ while True:
             user = message.author
             res = classifyMessage(message.content)
             if res[0][0] == 1:
-                await message.reply("")
-                """
+                await message.reply("Hi! My name is Hera. I noticed you may be experiencing emotional distress. If so, I want to help you. Are you having suicidal thoughts? (Y/N)")    
                 msg = await client.wait_for("message", check=lambda m: m.author == user)
-                await msg.reply("")
+                await msg.reply(check_answer1(msg.content))
                 response = await client.wait_for("message", check=lambda m: m.author == user)
-                await response.reply("")
-                """
-              
-            
+                await response.reply(check_answer2(response.content))
+                city = await client.wait_for("message", check=lambda m: m.author == user)
+                await city.reply(find_resource(city.content))
+                       
     client.run(token)
 
 
