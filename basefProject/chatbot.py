@@ -116,7 +116,7 @@ def check_answer1(msg):
     elif msg.lower() == "n":
         reply = "ask anxiety/depression (Y/N)"
     else:
-        reply = "Sorry, I don't understand"
+        reply = "nto understand"
     return reply
 
 def check_answer2(response):
@@ -125,7 +125,7 @@ def check_answer2(response):
     elif response.lower() == "n":
         reply = "somethign"
     else:
-        reply = "Sorry, I don't understand"
+        reply = "notunderstand"
     return reply
 
 
@@ -142,7 +142,7 @@ while True:
             user = message.author
             res = classifyMessage(message.content)
             if res[0][0] == 1:
-                await message.reply("Hi! My name is Hera. I noticed you may be experiencing emotional distress. If so, I want to help you. Are you having suicidal thoughts? (Y/N)")    
+                await message.reply("Hi! My name is Hera. I noticed you may be experiencing emotional distress. If so, I want to help you. Are you having suicidal thoughts?")    
                 msg = await client.wait_for("message", check=lambda m: m.author == user)
                 await msg.reply(check_answer1(msg.content))
                 response = await client.wait_for("message", check=lambda m: m.author == user)
