@@ -114,7 +114,7 @@ def check_answer1(msg):
     if msg.lower() == "y":
         reply = "add resources"
     elif msg.lower() == "n":
-        reply = "ask about anxiety/depression (Y/N)"
+        reply = "ask anxiety/depression (Y/N)"
     else:
         reply = "Sorry, I don't understand"
     return reply
