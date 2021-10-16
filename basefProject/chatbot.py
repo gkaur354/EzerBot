@@ -16,6 +16,7 @@ from types import CoroutineType
 from typing import DefaultDict
 import difflib
 import requests
+import asyncio
 
 #List of cities in Canada 
 cities = DefaultDict(list)
@@ -47,7 +48,7 @@ def remove_stopwords(phrase):
             noStopwords += " "
     return noStopwords
 
-#Function that removes punctuation and numbers
+#This function removes punctuation and numbers 
 def clean_text(phrase):
     pattern = r'[0-9]'
     final = ""
@@ -57,7 +58,6 @@ def clean_text(phrase):
             final += new_word
     return final 
 
-#Function that classifies message
 def classifyMessage(input):
     cleaned_phrase = clean_text(input.lower())
     noStopWords = remove_stopwords(cleaned_phrase)
@@ -70,7 +70,7 @@ def classifyMessage(input):
     return pred_int
 
 
-#Function that corrects spelling of city 
+#This function corrects the spelling of a city  
 def correct_spelling(user_response):
     city_names = list(cities.keys())
     response = user_response.capitalize()
@@ -80,7 +80,7 @@ def correct_spelling(user_response):
         matches = difflib.get_close_matches(response, city_names)
         return matches[0]
 
-#Function that finds resources in the user's vicinity using Yelp's API
+#This function finds mental health resources in the user's vicinity using Yelp's API
 
 url = 'https://api.yelp.com/v3/businesses/search'
 key = open(r'/Users/gurnirmalkaur/Desktop/key.txt').readlines()[0]
@@ -112,20 +112,21 @@ def find_resource(city):
 
 def check_answer1(msg):
     if msg.lower() == "y":
-        reply = "add resources"
+        reply = "I know asking for help is hard, but if you are struggling, there are people who want to help you. Call 833-456-4566 to connect with responders available 24/7.\n"
+        reply += "This is a safe and confidential place to talk and get support."
     elif msg.lower() == "n":
-        reply = "ask anxiety/depression (Y/N)"
+        reply = "Okay. Are you having feelings of anxiety or depression? (Y/N)"
     else:
-        reply = "nto understand"
+        reply = "Sorry, I dont understand"
     return reply
 
 def check_answer2(response):
     if response.lower() == "y":
-        reply = "ask city"
+        reply = "Can you tell me what city you're in? That way I can help you find some resources in your area."
     elif response.lower() == "n":
-        reply = "somethign"
+        reply = "Okay, I'm glad to hear that. If you ever do need help, just say !Hera"
     else:
-        reply = "notunderstand"
+        reply = "Sorry, I don't understand."
     return reply
 
 
@@ -142,14 +143,16 @@ while True:
             user = message.author
             res = classifyMessage(message.content)
             if res[0][0] == 1:
-                await message.reply("Hi! My name is Hera. I noticed you may be experiencing emotional distress. If so, I want to help you. Are you having suicidal thoughts?")    
+                await message.reply("Hi! I noticed you may be experiencing emotional distress. If so, I want to help you. Are you having suicidal thoughts? (Y/N)")    
                 msg = await client.wait_for("message", check=lambda m: m.author == user)
                 await msg.reply(check_answer1(msg.content))
+                    
                 response = await client.wait_for("message", check=lambda m: m.author == user)
                 await response.reply(check_answer2(response.content))
+
                 city = await client.wait_for("message", check=lambda m: m.author == user)
                 await city.reply(find_resource(city.content))
-                       
+        
     client.run(token)
 
 
