@@ -147,5 +147,5 @@ model.compile(loss="binary_crossentropy", optimizer=optimizer, metrics=['accurac
 hist = model.fit(padded_train,Y_train, epochs=40, validation_data=(padded_test, Y_test),verbose=1)
 model.save('chatbotmodel.h5', hist)
 
-#87%
+#89%
 
