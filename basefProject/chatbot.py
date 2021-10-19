@@ -3,7 +3,6 @@
 #Import libraries
 import discord
 from keras.preprocessing.sequence import pad_sequences
-from keras.preprocessing.text import Tokenizer
 import pickle
 from tensorflow.keras.models import load_model 
 from nltk.tokenize import word_tokenize
@@ -11,12 +10,9 @@ import re
 from string import punctuation
 
 import csv
-import collections
-from types import CoroutineType
 from typing import DefaultDict
 import difflib
 import requests
-import asyncio
 
 #List of cities in Canada 
 cities = DefaultDict(list)
@@ -110,20 +106,34 @@ def find_resource(city):
         resources += resource 
     return resources
 
+def yes_no(response):
+    yes = ["yes", "yeah", "yep", "y" "sure", "ya", "yah"]
+    no = ["no", "nah", "nope", "n",]
+
+    if any(substring in response.lower() for substring in yes):
+        answer = 'y'
+    elif any(substring in response.lower() for substring in no):
+        answer = 'n'
+    else:
+        answer = "invalid"
+    return answer
+
 def check_answer1(msg):
-    if msg.lower() == "y":
+    answer = yes_no(msg)
+    if answer == "y":
         reply = "I know asking for help is hard, but if you are struggling, there are people who want to help you. Call 833-456-4566 to connect with responders available 24/7.\n"
         reply += "This is a safe and confidential place to talk and get support."
-    elif msg.lower() == "n":
-        reply = "Okay. Are you having feelings of anxiety or depression? (Y/N)"
+    elif answer == "n":
+        reply = "Okay. Are you having feelings of anxiety or depression?"
     else:
         reply = "Sorry, I dont understand"
     return reply
 
 def check_answer2(response):
-    if response.lower() == "y":
+    answer = yes_no(response)
+    if answer == "y":
         reply = "Can you tell me what city you're in? That way I can help you find some resources in your area."
-    elif response.lower() == "n":
+    elif answer == "n":
         reply = "Okay, I'm glad to hear that. If you ever do need help, just say !Hera"
     else:
         reply = "Sorry, I don't understand."
@@ -142,16 +152,18 @@ while True:
         else:
             user = message.author
             res = classifyMessage(message.content)
+
             if res[0][0] == 1:
-                await message.reply("Hi! I noticed you may be experiencing emotional distress. If so, I want to help you. Are you having suicidal thoughts? (Y/N)")    
-                msg = await client.wait_for("message", check=lambda m: m.author == user)
+                await message.reply("Hi! I noticed you may be experiencing emotional distress. If so, I want to help you. Are you having suicidal thoughts?")    
+                msg = await client.wait_for("message", max = 1, check=lambda m: m.author == user)
                 await msg.reply(check_answer1(msg.content))
                     
-                response = await client.wait_for("message", check=lambda m: m.author == user)
+                response = await client.wait_for("message", max = 1, check=lambda m: m.author == user)
                 await response.reply(check_answer2(response.content))
 
-                city = await client.wait_for("message", check=lambda m: m.author == user)
+                city = await client.wait_for("message", max = 1, check=lambda m: m.author == user)
                 await city.reply(find_resource(city.content))
+               
         
     client.run(token)
 
