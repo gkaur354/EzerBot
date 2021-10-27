@@ -81,9 +81,8 @@ def correct_spelling(user_response):
 url = 'https://api.yelp.com/v3/businesses/search'
 key = open(r'/Users/gurnirmalkaur/Desktop/key.txt').readlines()[0]
 
-def find_resource(city):
+def find_resource(city, category):
     location = correct_spelling(str(city))
-    category = "c_and_mh"
     term = "mental health"
     resources = ""
     headers = {
@@ -107,7 +106,7 @@ def find_resource(city):
     return resources
 
 def yes_no(response):
-    yes = ["yes", "yeah", "yep", "y" "sure", "ya", "yah"]
+    yes = ["yes", "yeah", "yep", "y" "sure", "ya", "yah", "yea"]
     no = ["no", "nah", "nope", "n",]
 
     if any(substring in response.lower() for substring in yes):
@@ -115,19 +114,20 @@ def yes_no(response):
     elif any(substring in response.lower() for substring in no):
         answer = 'n'
     else:
-        answer = "invalid"
+        answer = "Sorry, I don't understand"
     return answer
 
 def check_answer1(msg):
     answer = yes_no(msg)
     if answer == "y":
-        reply = "I know asking for help is hard, but if you are struggling, there are people who want to help you. Call 833-456-4566 to connect with responders available 24/7.\n"
-        reply += "This is a safe and confidential place to talk and get support."
+        reply = "I know asking for help is hard, but if you are struggling, there are people who want to help you. Call 833-456-4566 to connect with responders available 24/7. This is a safe and confidential place to talk and get support.\n"
+        reply += "If you don't want to talk on the phone, can you tell me what city you are in so I can help you find some other resources?"
     elif answer == "n":
         reply = "Okay. Are you having feelings of anxiety or depression?"
     else:
-        reply = "Sorry, I dont understand"
-    return reply
+        answer = 'invalid'
+        reply = "Sorry, I dont understand, Are you having suicidal thoughts?"
+    return reply, answer 
 
 def check_answer2(response):
     answer = yes_no(response)
@@ -136,12 +136,14 @@ def check_answer2(response):
     elif answer == "n":
         reply = "Okay, I'm glad to hear that. If you ever do need help, just say !Hera"
     else:
+        answer = 'invalid'
         reply = "Sorry, I don't understand."
     return reply
 
 
 #Connect to Discord bot 
 while True:
+    # add check = lambda m: m.author == user if in general
     @client.event
     async def on_ready():
         print("Ready")
@@ -152,19 +154,24 @@ while True:
         else:
             user = message.author
             res = classifyMessage(message.content)
-
             if res[0][0] == 1:
                 await message.reply("Hi! I noticed you may be experiencing emotional distress. If so, I want to help you. Are you having suicidal thoughts?")    
-                msg = await client.wait_for("message", check=lambda m: m.author == user)
-                await msg.reply(check_answer1(msg.content))
-                    
-                response = await client.wait_for("message", check=lambda m: m.author == user)
+                msg = await client.wait_for("message")
+                reply, state = check_answer1(msg.content)
+                await msg.reply(reply)
+            
+                if state == 'y':
+                    city_msg = await client.wait_for("message")
+                    category = "hospital"
+                    await city_msg.reply(find_resource(city_msg.content, category))
+                
+                response = await client.wait_for("message")
                 await response.reply(check_answer2(response.content))
 
-                city = await client.wait_for("message", check=lambda m: m.author == user)
-                await city.reply(find_resource(city.content))
+                city = await client.wait_for("message")
+                category = "c_and_mh"
+                await city.reply(find_resource(city.content, category))
                
-        
     client.run(token)
 
 
