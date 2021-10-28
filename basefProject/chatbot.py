@@ -126,7 +126,6 @@ def check_answer1(msg):
         reply = "Okay. Are you having feelings of anxiety or depression?"
     else:
         answer = 'invalid'
-        reply = "Sorry, I dont understand, Are you having suicidal thoughts?"
     return reply, answer 
 
 def check_answer2(response):
@@ -137,7 +136,7 @@ def check_answer2(response):
         reply = "Okay, I'm glad to hear that. If you ever do need help, just say !Hera"
     else:
         answer = 'invalid'
-        reply = "Sorry, I don't understand."
+        reply = "Sorry, I don;t understand. Are you having feelings of anxiety or depression?"
     return reply
 
 
@@ -155,22 +154,21 @@ while True:
             user = message.author
             res = classifyMessage(message.content)
             if res[0][0] == 1:
-                await message.reply("Hi! I noticed you may be experiencing emotional distress. If so, I want to help you. Are you having suicidal thoughts?")    
+                await message.reply("Hi, I noticed you may be experiencing emotional distress. If so, I want to help you. Are you having suicidal thoughts?")    
                 msg = await client.wait_for("message")
                 reply, state = check_answer1(msg.content)
                 await msg.reply(reply)
-            
+
                 if state == 'y':
                     city_msg = await client.wait_for("message")
-                    category = "hospital"
-                    await city_msg.reply(find_resource(city_msg.content, category))
+                    await city_msg.reply(find_resource(city_msg.content, "hospital"))
+                    
                 
-                response = await client.wait_for("message")
+                response = await client.wait_for("message") #await unitl valid response?
                 await response.reply(check_answer2(response.content))
 
                 city = await client.wait_for("message")
-                category = "c_and_mh"
-                await city.reply(find_resource(city.content, category))
+                await city.reply(find_resource(city.content, "c_and_mh"))
                
     client.run(token)
 
