@@ -136,7 +136,7 @@ def check_answer2(response):
         reply = "Okay, I'm glad to hear that. If you ever do need help, just say !Hera"
     else:
         answer = 'invalid'
-        reply = "Sorry, I don;t understand. Are you having feelings of anxiety or depression?"
+        reply = "Sorry, I don't understand. Are you having feelings of anxiety or depression?"
     return reply
 
 
@@ -164,7 +164,7 @@ while True:
                     await city_msg.reply(find_resource(city_msg.content, "hospital"))
                     
                 
-                response = await client.wait_for("message") #await unitl valid response?
+                response = await client.wait_for("message") 
                 await response.reply(check_answer2(response.content))
 
                 city = await client.wait_for("message")
