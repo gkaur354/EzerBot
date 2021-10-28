@@ -27,13 +27,11 @@ with open('/Users/gurnirmalkaur/Desktop/canadaCities.csv', "r") as csvfile:
 client = discord.Client()
 token = "ODcyOTE5MDc1OTM0ODMwNTkz.YQw3PQ.chMozVGpCcxhK8NHKGlLxhpCkWI"
 
-
 model = load_model('chatbotmodel.h5')
 with open('tokenizer.pickle', 'rb') as handle:
     tokenizer = pickle.load(handle)
 with open("stopwords_pickle", "rb") as f:
     stopwords_list = pickle.load(f)
-
 
 def remove_stopwords(phrase):
     noStopwords = ""
@@ -125,6 +123,7 @@ def check_answer1(msg):
     elif answer == "n":
         reply = "Okay. Are you having feelings of anxiety or depression?"
     else:
+        reply = "Sorry, I don't understand. Are you having suicidal thoughts?"
         answer = 'invalid'
     return reply, answer 
 
@@ -137,7 +136,7 @@ def check_answer2(response):
     else:
         answer = 'invalid'
         reply = "Sorry, I don't understand. Are you having feelings of anxiety or depression?"
-    return reply
+    return reply, answer
 
 
 #Connect to Discord bot 
@@ -151,25 +150,35 @@ while True:
         if message.author == client.user:
             return 
         else:
-            user = message.author
             res = classifyMessage(message.content)
             if res[0][0] == 1:
                 await message.reply("Hi, I noticed you may be experiencing emotional distress. If so, I want to help you. Are you having suicidal thoughts?")    
-                msg = await client.wait_for("message")
-                reply, state = check_answer1(msg.content)
-                await msg.reply(reply)
-
-                if state == 'y':
-                    city_msg = await client.wait_for("message")
-                    await city_msg.reply(find_resource(city_msg.content, "hospital"))
-                    
                 
-                response = await client.wait_for("message") 
-                await response.reply(check_answer2(response.content))
+                invalid = True 
+                while invalid:
+                    msg = await client.wait_for("message") 
+                    reply, state = check_answer1(msg.content)
+                    await msg.reply(reply)
+
+                    if state == 'y':
+                        city_msg = await client.wait_for("message")
+                        await city_msg.reply(find_resource(city_msg.content, "hospital"))
+
+                    if state != 'invalid':
+                        invalid = False
+                
+                invalid = True 
+                while invalid:
+                    response = await client.wait_for("message") 
+                    reply, state = check_answer2(response.content)
+                    await response.reply(reply)
+
+                    if state != 'invalid':
+                        invalid = False
 
                 city = await client.wait_for("message")
                 await city.reply(find_resource(city.content, "c_and_mh"))
-               
+            
     client.run(token)
 
 
