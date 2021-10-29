@@ -67,12 +67,21 @@ def classifyMessage(input):
 #This function corrects the spelling of a city  
 def correct_spelling(user_response):
     city_names = list(cities.keys())
-    response = user_response.capitalize()
-    if city_names.count(response):
-        return response 
-    else:
-        matches = difflib.get_close_matches(response, city_names)
-        return matches[0]
+    response = user_response.title().split(" ")
+    city = ""
+    for word in response:
+        if city_names.count(word):
+           city = word 
+           return city 
+    match_score = 0
+    for word in response:
+        matches = difflib.get_close_matches(word, city_names)
+        if matches:
+            score = difflib.SequenceMatcher(None, word, matches[0]).ratio() 
+            if score > match_score:
+                match_score = score
+                city = matches[0]
+    return city
 
 #This function finds mental health resources in the user's vicinity using Yelp's API
 
