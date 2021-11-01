@@ -98,7 +98,7 @@ def find_resource(city, category):
     parameters = {'location': location,
                 'categories': category,
                 'term': term,
-                'limit': 5}
+                'limit': 3}
     response = requests.get(url, headers=headers, params=parameters)
     resource = response.json()['businesses']
 
@@ -160,6 +160,7 @@ while True:
             return 
         else:
             res = classifyMessage(message.content)
+            user = message.user
             if res[0][0] == 1:
                 await message.reply("Hi, I noticed you may be experiencing emotional distress. If so, I want to help you. Are you having suicidal thoughts?")    
                 
@@ -178,7 +179,7 @@ while True:
                 
                 invalid = True 
                 while invalid:
-                    response = await client.wait_for("message") 
+                    response = await client.wait_for("message")
                     reply, state = check_answer2(response.content)
                     await response.reply(reply)
 
