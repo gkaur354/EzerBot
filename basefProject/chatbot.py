@@ -69,10 +69,6 @@ def correct_spelling(user_response):
     city_names = list(cities.keys())
     response = user_response.title().split(" ")
     city = ""
-    for word in response:
-        if city_names.count(word):
-           city = word 
-           return city 
     match_score = 0
     for word in response:
         matches = difflib.get_close_matches(word, city_names)
@@ -81,6 +77,8 @@ def correct_spelling(user_response):
             if score > match_score:
                 match_score = score
                 city = matches[0]
+        else:
+            city = 'invalid'
     return city
 
 #This function finds mental health resources in the user's vicinity using Yelp's API
@@ -150,7 +148,6 @@ def check_answer2(response):
 
 #Connect to Discord bot 
 while True:
-    # add check = lambda m: m.author == user if in general
     @client.event
     async def on_ready():
         print("Ready")
@@ -160,18 +157,18 @@ while True:
             return 
         else:
             res = classifyMessage(message.content)
-            user = message.user
+            user = message.author
             if res[0][0] == 1:
                 await message.reply("Hi, I noticed you may be experiencing emotional distress. If so, I want to help you. Are you having suicidal thoughts?")    
                 
                 invalid = True 
                 while invalid:
-                    msg = await client.wait_for("message") 
+                    msg = await client.wait_for("message",check = lambda m: m.author == user) 
                     reply, state = check_answer1(msg.content)
                     await msg.reply(reply)
 
                     if state == 'y':
-                        city_msg = await client.wait_for("message")
+                        city_msg = await client.wait_for("message",check = lambda m: m.author == user)
                         await city_msg.reply(find_resource(city_msg.content, "hospital"))
 
                     if state != 'invalid':
@@ -179,14 +176,14 @@ while True:
                 
                 invalid = True 
                 while invalid:
-                    response = await client.wait_for("message")
+                    response = await client.wait_for("message",check = lambda m: m.author == user)
                     reply, state = check_answer2(response.content)
                     await response.reply(reply)
 
                     if state != 'invalid':
                         invalid = False
-
-                city = await client.wait_for("message")
+                
+                city = await client.wait_for("message",check = lambda m: m.author == user)
                 await city.reply(find_resource(city.content, "c_and_mh"))
             
     client.run(token)
