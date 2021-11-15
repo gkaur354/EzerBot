@@ -2,13 +2,10 @@
 #ideation, depression, anxiety, etc) or 0 (other)
 
 #Import libraries
-import sklearn
 import numpy as np
 import nltk
-import tensorflow as tf
 import pandas as pd
 from nltk.corpus import stopwords
-import scipy
 import pickle
 
 from tensorflow.keras.layers import Dense, LSTM, Embedding, Bidirectional, SpatialDropout1D
@@ -18,7 +15,7 @@ from tensorflow.keras.initializers import Constant
 from tensorflow.keras.optimizers import Adam
 
 #load the data 
-data = pd.read_csv("/Users/gurnirmalkaur/Desktop/basef-dataset.csv")
+data = pd.read_csv("/Users/gurnirmalkaur/Desktop/BasefDatasetUpdate.csv")
 print(data.head())
 
 #Count of 0 and 1 in labeled dataset
@@ -31,9 +28,6 @@ stop_words = stopwords.words('english')
 #Remove I, me, my and myself from stopwords because they provide important information 
 last_index = len(stop_words) - 1
 stopWords = stop_words[4:last_index]
-#stopWords = stop_words[26:29]
-#stopWords.extend(stop_words[35:last_index])
-
 
 with open('stopwords_pickle', 'wb') as f:
     pickle.dump(stopWords,f)
@@ -141,10 +135,10 @@ optimizer = Adam(learning_rate=3e-4)
 
 model.compile(loss="binary_crossentropy", optimizer=optimizer, metrics=['accuracy'])
 
-#from keras import callbacks
-#earlystopping = callbacks.EarlyStopping(monitor="val_loss",mode="min",patience=5, restore_best_weights=True)
+from keras import callbacks
+earlystopping = callbacks.EarlyStopping(monitor="val_loss",mode="min",patience=10, restore_best_weights=True)
 
-hist = model.fit(padded_train,Y_train, epochs=40, validation_data=(padded_test, Y_test),verbose=1)
+hist = model.fit(padded_train,Y_train, epochs=80, validation_data=(padded_test, Y_test),verbose=1,callbacks=earlystopping)
 model.save('chatbotmodel.h5', hist)
 
 #89%
