@@ -67,18 +67,19 @@ def classifyMessage(input):
 #This function corrects the spelling of a city  
 def correct_spelling(user_response):
     city_names = list(cities.keys())
-    response = user_response.title().split(" ")
+    response = user_response.title()
+    split_string = re.split("\s|(?<!\d)[,.](?!\d)", response)
     city = ""
     match_score = 0
-    for word in response:
+    for word in split_string:
         matches = difflib.get_close_matches(word, city_names)
         if matches:
             score = difflib.SequenceMatcher(None, word, matches[0]).ratio() 
             if score > match_score:
                 match_score = score
                 city = matches[0]
-        else:
-            city = 'invalid'
+    if score <= 0.4:
+        city = 'invalid'
     return city
 
 #This function finds mental health resources in the user's vicinity using Yelp's API
@@ -88,6 +89,9 @@ key = open(r'/Users/gurnirmalkaur/Desktop/key.txt').readlines()[0]
 
 def find_resource(city, category):
     location = correct_spelling(str(city))
+    if location == 'invalid':
+        location = "Brantford"
+        
     term = "mental health"
     resources = ""
     headers = {
