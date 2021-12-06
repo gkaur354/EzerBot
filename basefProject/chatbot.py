@@ -130,7 +130,7 @@ def check_answer1(msg):
     answer = yes_no(msg)
     if answer == "y":
         reply = "I know asking for help is hard, but if you are struggling, there are people who want to help you. Call 833-456-4566 to connect with responders available 24/7. This is a safe and confidential place to talk and get support.\n"
-        reply += "If you don't want to talk on the phone, can you tell me what city you are in so I can help you find some other resources?"
+        reply += "Also, can you tell me what city you are in so I can help you find some other resources?"
     elif answer == "n":
         reply = "Okay. Are you having feelings of anxiety or depression?"
     else:
