@@ -126,10 +126,7 @@ for word, i in word_index.items():
 #Create model 
 model = Sequential()
 model.add(Embedding(num_words,100,embeddings_initializer=Constant(embedding_matrix),input_length=maximum,trainable=False))
-model.add(SpatialDropout1D(0.3))
-model.add(Bidirectional(LSTM(100, dropout=0.01)))
-model.add(Dense(64, activation='relu'))
-model.add(Dense(32, activation='relu'))
+model.add(LSTM(100, dropout=0.1))
 model.add(Dense(1, activation='sigmoid'))
 optimizer = Adam(learning_rate=3e-4)
 
@@ -141,5 +138,5 @@ earlystopping = callbacks.EarlyStopping(monitor="val_loss",mode="min",patience=1
 hist = model.fit(padded_train,Y_train, epochs=80, validation_data=(padded_test, Y_test),verbose=1,callbacks=earlystopping)
 model.save('chatbotmodel.h5', hist)
 
-#89%
+#90%
 
