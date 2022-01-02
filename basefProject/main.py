@@ -123,7 +123,7 @@ for word, i in word_index.items():
         if emb_vec is not None:
             embedding_matrix[i] = emb_vec
 
-#Create model with GloVe
+#Create model 
 model = Sequential()
 model.add(Embedding(num_words,100,embeddings_initializer=Constant(embedding_matrix),input_length=maximum,trainable=False))
 model.add(SpatialDropout1D(0.3))
