@@ -1,15 +1,12 @@
 #import libraries 
-import numpy as np
 import nltk
 import pandas as pd
-from nltk.corpus import stopwords
 import pickle
 
 from keras.preprocessing.sequence import pad_sequences
 import pickle
 from tensorflow.keras.models import load_model 
 
-from sklearn.metrics import roc_auc_score
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
@@ -18,7 +15,7 @@ from sklearn.metrics import f1_score
 
 
 #Load test set 
-data = pd.read_csv("/Users/gurnirmalkaur/Desktop/testSetBASEF.csv")
+data = pd.read_csv("/Users/gurnirmalkaur/Desktop/testSet.csv")
 
 model = load_model('chatbotmodel.h5')
 with open('tokenizer.pickle', 'rb') as handle:
