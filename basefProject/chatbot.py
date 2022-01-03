@@ -57,8 +57,8 @@ def classifyMessage(input):
     noStopWords = remove_stopwords(cleaned_phrase)
     
     phrase = tokenizer.texts_to_sequences([noStopWords.lower()])
-    padded = pad_sequences(phrase, maxlen=50, truncating='post', padding='post')
-    pred = model.predict(padded)
+    padded_phrase = pad_sequences(phrase, maxlen=50, truncating='post', padding='post')
+    pred = model.predict(padded_phrase)
     pred_int = pred.round().astype("int")
 
     return pred_int
