@@ -8,19 +8,17 @@ import pickle
 from keras.preprocessing.sequence import pad_sequences
 import pickle
 from tensorflow.keras.models import load_model 
-from nltk.tokenize import word_tokenize
-import re
-from string import punctuation
 
-import csv
-from typing import DefaultDict
-import difflib
-import requests
+from sklearn.metrics import roc_auc_score
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+from sklearn.metrics import f1_score
 
 
 #Load test set 
 data = pd.read_csv("/Users/gurnirmalkaur/Desktop/testSetBASEF.csv")
-print(data.head())
 
 model = load_model('chatbotmodel.h5')
 with open('tokenizer.pickle', 'rb') as handle:
@@ -63,3 +61,28 @@ y = data['intention']
 
 test_sequences = tokenizer.texts_to_sequences(X)
 padded_test = pad_sequences(test_sequences, maxlen=50, truncating='post', padding='post')
+
+ 
+
+# predict on test set
+classes = model.predict_classes(padded_test, verbose=0)
+# reduce to 1d array
+
+yhat_classes = classes[:, 0]
+ 
+# accuracy: (tp + tn) / (p + n)
+accuracy = accuracy_score(y, classes)
+print('Accuracy: %f' % accuracy)
+# precision tp / (tp + fp)
+precision = precision_score(y, classes)
+print('Precision: %f' % precision)
+# recall: tp / (tp + fn)
+recall = recall_score(y, classes)
+print('Recall: %f' % recall)
+# f1: 2 tp / (2 tp + fp + fn)
+f1 = f1_score(y, classes)
+print('F1 score: %f' % f1)
+
+# confusion matrix
+matrix = confusion_matrix(y, classes)
+print(matrix)
