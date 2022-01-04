@@ -84,3 +84,4 @@ print('F1 score: %f' % f1)
 # confusion matrix
 matrix = confusion_matrix(y, classes)
 print(matrix)
+
