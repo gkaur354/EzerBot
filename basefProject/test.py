@@ -15,7 +15,7 @@ from sklearn.metrics import f1_score
 
 
 #Load test set 
-data = pd.read_csv("/Users/gurnirmalkaur/Desktop/TEST.csv")
+data = pd.read_csv("/Users/gurnirmalkaur/Desktop/BASEF2020test.csv")
 
 model = load_model('chatbotmodel.h5')
 with open('tokenizer.pickle', 'rb') as handle:
