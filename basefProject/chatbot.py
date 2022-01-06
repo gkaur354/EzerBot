@@ -16,7 +16,7 @@ import requests
 
 #List of cities in Canada 
 cities = DefaultDict(list)
-with open('/Users/gurnirmalkaur/Desktop/canadaCities.csv', "r") as csvfile:
+with open('/Users/gurnirmalkaur/Desktop/pathBASEF/canadaCities.csv', "r") as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         city = row[1]
@@ -85,7 +85,7 @@ def correct_spelling(user_response):
 #This function finds mental health resources in the user's vicinity using Yelp's API
 
 url = 'https://api.yelp.com/v3/businesses/search'
-key = open(r'/Users/gurnirmalkaur/Desktop/key.txt').readlines()[0]
+key = open(r'/Users/gurnirmalkaur/Desktop/pathBASEF/key.txt').readlines()[0]
 
 def find_resource(city, category):
     location = correct_spelling(str(city))
