@@ -15,7 +15,7 @@ from tensorflow.keras.initializers import Constant
 from tensorflow.keras.optimizers import Adam
 
 #load the data 
-data = pd.read_csv("/Users/gurnirmalkaur/Desktop/BasefDatasetUpdate.csv")
+data = pd.read_csv("/Users/gurnirmalkaur/Desktop/pathBASEF/BasefDatasetUpdate.csv")
 print(data.head())
 
 #Count of 0 and 1 in labeled dataset
@@ -107,7 +107,7 @@ word_index = tokenizer.word_index
 
 #Create embedding dictionary
 glove_vectors = dict()
-with open("/Users/gurnirmalkaur/Desktop/glove.6B.100d.txt", "r") as f:
+with open("/Users/gurnirmalkaur/Desktop/pathBASEF/glove.6B.100d.txt", "r") as f:
     for line in f:
         values = line.split()
         word = values[0]
