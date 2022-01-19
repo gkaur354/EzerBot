@@ -47,7 +47,7 @@ def clean_text(phrase):
     pattern = r'[0-9]'
     final = ""
     for i in phrase:
-        if i not in punctuation:
+        if i not in punctuation: 
             new_word = re.sub(pattern, '', i)
             final += new_word
     return final 
@@ -151,6 +151,7 @@ def check_answer2(response):
 
 
 #Connect to Discord bot 
+
 while True:
     @client.event
     async def on_ready():
@@ -160,12 +161,15 @@ while True:
         if message.author == client.user:
             return 
         else:
+            in_loop = False
             res = classifyMessage(message.content)
             user = message.author
-            if res[0][0] == 1 or message.content == '!Hera':
-                await message.reply("Hi, I noticed you may be experiencing emotional distress. If so, I want to help you. Are you having suicidal thoughts?")    
-                
+            if res[0][0] == 1 and in_loop == False:
+                await message.reply("Hi, I noticed you may be experiencing emotional distress. If so, I want to help you. Are you having suicidal thoughts?")  
+                #change states  
+                in_loop = True
                 invalid = True 
+                
                 while invalid:
                     msg = await client.wait_for("message",check = lambda m: m.author == user) 
                     reply, state = check_answer1(msg.content)
