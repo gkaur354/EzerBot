@@ -165,11 +165,10 @@ while True:
             res = classifyMessage(message.content)
             user = message.author
             if res[0][0] == 1 and in_loop == False:
-                await message.reply("Hi, I noticed you may be experiencing emotional distress. If so, I want to help you. Are you having suicidal thoughts?")  
-                #change states  
+                await message.reply("Hi, I noticed you may be experiencing emotional distress. If so, I want to help you. Are you having suicidal thoughts?")    
                 in_loop = True
                 invalid = True 
-                
+
                 while invalid:
                     msg = await client.wait_for("message",check = lambda m: m.author == user) 
                     reply, state = check_answer1(msg.content)
