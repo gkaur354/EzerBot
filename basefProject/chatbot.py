@@ -149,7 +149,8 @@ def check_answer2(response):
         reply = "Sorry, I don't understand. Are you having feelings of anxiety or depression?"
     return reply, answer
 
-
+# Next step: When in the loop of res[0][0] == 1: stop/pause? the on_message event.
+# Also - Allow the user to respond with words other than yes or no. 
 #Connect to Discord bot 
 while True:
     @client.event
