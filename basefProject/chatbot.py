@@ -161,12 +161,11 @@ while True:
         if message.author == client.user:
             return 
         else:
-            in_loop = False
             res = classifyMessage(message.content)
             user = message.author
-            if res[0][0] == 1 and in_loop == False:
+            if res[0][0] == 1:
+            
                 await message.reply("Hi, I noticed you may be experiencing emotional distress. If so, I want to help you. Are you having suicidal thoughts?")    
-                in_loop = True
                 invalid = True 
 
                 while invalid:
