@@ -1,6 +1,7 @@
 #Chatbot application that uses the trained model
 
 #Import libraries
+from xmlrpc.client import FastMarshaller
 import discord
 from keras.preprocessing.sequence import pad_sequences
 import pickle
@@ -100,7 +101,7 @@ def find_resource(city, category):
     parameters = {'location': location,
                 'categories': category,
                 'term': term,
-                'limit': 3}
+                'limit': 4}
     response = requests.get(url, headers=headers, params=parameters)
     resource = response.json()['businesses']
 
@@ -115,8 +116,8 @@ def find_resource(city, category):
     return resources
 
 def yes_no(response):
-    yes = ["yes", "yeah", "yep", "y" "sure", "ya", "yah", "yea"]
-    no = ["no", "nah", "nope", "n",]
+    yes = ["yes", "yeah", "yep", "sure", "ya", "yah", "yea" "mhm", "I guess"]
+    no = ["no", "nah", "nope"]
 
     if any(substring in response.lower() for substring in yes):
         answer = 'y'
@@ -149,48 +150,50 @@ def check_answer2(response):
         reply = "Sorry, I don't understand. Are you having feelings of anxiety or depression?"
     return reply, answer
 
-# Next step: When in the loop of res[0][0] == 1: stop/pause? the on_message event. 
-# Also - allow the user to respond to questions without the use of yes and no (or make the questions more specific.)
 #Connect to the Discord bot 
-while True:
-    @client.event
-    async def on_ready():
-        print("Ready")
-    @client.event
-    async def on_message(message):
-        if message.author == client.user:
-            return 
-        else:
-            res = classifyMessage(message.content)
-            user = message.author
-            if res[0][0] == 1 or message.content == "!EzerBot":
-                await message.reply("Hi, I noticed you may be experiencing emotional distress. If so, I want to help you. Are you having suicidal thoughts?")    
-                invalid = True 
-                while invalid:
-                    msg = await client.wait_for("message",check = lambda m: m.author == user) 
-                    reply, state = check_answer1(msg.content)
-                    await msg.reply(reply)
 
-                    if state == 'y':
-                        city_msg = await client.wait_for("message",check = lambda m: m.author == user)
-                        await city_msg.reply(find_resource(city_msg.content, "hospital"))
+@client.event
+async def on_ready():
+    global in_loop
+    in_loop = False
+    print("Ready")
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        global in_loop 
+        in_loop = True
+        return
+    elif in_loop == False:
+        res = classifyMessage(message.content)
+        user = message.author
+        if res[0][0] == 1:
+            await message.reply("Hi, I noticed you may be experiencing emotional distress. If so, I want to help you. Are you having suicidal thoughts?")    
+            invalid = True 
+            while invalid:
+                msg = await client.wait_for("message",check = lambda m: m.author == user) 
+                reply, state = check_answer1(msg.content)
+                await msg.reply(reply)
 
-                    if state != 'invalid':
-                        invalid = False
-                
-                invalid = True 
-                while invalid:
-                    response = await client.wait_for("message",check = lambda m: m.author == user)
-                    reply, state = check_answer2(response.content)
-                    await response.reply(reply)
+                if state == 'y':
+                    city_msg = await client.wait_for("message",check = lambda m: m.author == user)
+                    await city_msg.reply(find_resource(city_msg.content, "hospital"))
 
-                    if state != 'invalid':
-                        invalid = False
-                
-                city = await client.wait_for("message",check = lambda m: m.author == user)
-                await city.reply(find_resource(city.content, "c_and_mh"))
+                if state != 'invalid':
+                    invalid = False
             
-    client.run(token)
+            invalid = True 
+            while invalid:
+                response = await client.wait_for("message",check = lambda m: m.author == user)
+                reply, state = check_answer2(response.content)
+                await response.reply(reply)
+
+                if state != 'invalid':
+                    invalid = False
+            
+            city = await client.wait_for("message",check = lambda m: m.author == user)
+            await city.reply(find_resource(city.content, "c_and_mh"))
+        
+client.run(token)
 
 
 
