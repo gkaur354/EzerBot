@@ -143,7 +143,7 @@ def check_answer2(response):
     if answer == "y":
         reply = "Can you tell me what city you're in? That way I can help you find some resources in your area."
     elif answer == "n":
-        reply = "Okay, I'm glad to hear that. If you ever do need help, just say !Hera"
+        reply = "Okay, I'm glad to hear that. If you ever do need help, just say !EzerBot"
     else:
         answer = 'invalid'
         reply = "Sorry, I don't understand. Are you having feelings of anxiety or depression?"
@@ -163,7 +163,7 @@ while True:
         else:
             res = classifyMessage(message.content)
             user = message.author
-            if res[0][0] == 1:
+            if res[0][0] == 1 or message.content == "!EzerBot":
                 await message.reply("Hi, I noticed you may be experiencing emotional distress. If so, I want to help you. Are you having suicidal thoughts?")    
                 invalid = True 
                 while invalid:
