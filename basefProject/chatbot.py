@@ -151,7 +151,6 @@ def check_answer2(response):
 
 
 #Connect to Discord bot 
-
 while True:
     @client.event
     async def on_ready():
@@ -166,7 +165,6 @@ while True:
             if res[0][0] == 1:
                 await message.reply("Hi, I noticed you may be experiencing emotional distress. If so, I want to help you. Are you having suicidal thoughts?")    
                 invalid = True 
-
                 while invalid:
                     msg = await client.wait_for("message",check = lambda m: m.author == user) 
                     reply, state = check_answer1(msg.content)
