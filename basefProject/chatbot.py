@@ -164,7 +164,6 @@ while True:
             res = classifyMessage(message.content)
             user = message.author
             if res[0][0] == 1:
-            
                 await message.reply("Hi, I noticed you may be experiencing emotional distress. If so, I want to help you. Are you having suicidal thoughts?")    
                 invalid = True 
 
