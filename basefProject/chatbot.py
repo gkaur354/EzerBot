@@ -192,6 +192,7 @@ async def on_message(message):
             
             city = await client.wait_for("message",check = lambda m: m.author == user)
             await city.reply(find_resource(city.content, "c_and_mh"))
+            
         
 client.run(token)
 
