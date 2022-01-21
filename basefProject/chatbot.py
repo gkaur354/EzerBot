@@ -1,7 +1,6 @@
 #Chatbot application that uses the trained model
 
 #Import libraries
-from xmlrpc.client import FastMarshaller
 import discord
 from keras.preprocessing.sequence import pad_sequences
 import pickle
