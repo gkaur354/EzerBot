@@ -115,7 +115,7 @@ def find_resource(city, category):
     return resources
 
 def yes_no(response):
-    yes = ["yes", "yeah", "yep", "sure", "ya", "yah", "yea" "mhm", "I guess"]
+    yes = ["yes", "yeah", "yep", "sure", "ya", "yah", "yea", "I guess", "anxiety", "depression"]
     no = ["no", "nah", "nope"]
 
     if any(substring in response.lower() for substring in yes):
