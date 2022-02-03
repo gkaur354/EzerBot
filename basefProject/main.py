@@ -138,5 +138,5 @@ earlystopping = callbacks.EarlyStopping(monitor="val_loss",mode="min",patience=1
 hist = model.fit(padded_train,Y_train, epochs=80, validation_data=(padded_test, Y_test),verbose=1,callbacks=earlystopping)
 model.save('chatbotmodel.h5', hist)
 
-#90%
+#89%
 
