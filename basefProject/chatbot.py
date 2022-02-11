@@ -1,4 +1,4 @@
-#Chatbot application that uses the trained model
+#This chatbot application uses the trained model
 
 #Import libraries
 import discord
