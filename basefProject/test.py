@@ -62,6 +62,7 @@ padded_test = pad_sequences(test_sequences, maxlen=50, truncating='post', paddin
  
 
 # predict on test set
+
 classes = model.predict_classes(padded_test, verbose=0)
 print(classes)
 # reduce to 1d array
