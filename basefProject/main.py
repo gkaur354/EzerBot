@@ -8,7 +8,7 @@ import pandas as pd
 from nltk.corpus import stopwords
 import pickle
 
-from tensorflow.keras.layers import Dense, LSTM, Embedding, Bidirectional, SpatialDropout1D
+from tensorflow.keras.layers import Dense, LSTM, Embedding 
 from tensorflow.keras.models import Model
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.initializers import Constant
@@ -126,7 +126,7 @@ for word, i in word_index.items():
 #Create model 
 model = Sequential()
 model.add(Embedding(num_words,100,embeddings_initializer=Constant(embedding_matrix),input_length=maximum,trainable=False))
-model.add(LSTM(100, dropout=0.1))
+model.add(LSTM(100, dropout=0.2))
 model.add(Dense(1, activation='sigmoid'))
 optimizer = Adam(learning_rate=3e-4)
 
