@@ -25,7 +25,7 @@ with open('/Users/gurnirmalkaur/Desktop/pathBASEF/canadaCities.csv', "r") as csv
 
 #Bot login 
 client = discord.Client()
-token = "ODcyOTE5MDc1OTM0ODMwNTkz.YQw3PQ.chMozVGpCcxhK8NHKGlLxhpCkWI"
+token = TK
 
 model = load_model('chatbotmodel.h5')
 with open('tokenizer.pickle', 'rb') as handle:
