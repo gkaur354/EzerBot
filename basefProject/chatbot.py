@@ -1,4 +1,4 @@
-#This file is currently being updated to improve chatbot response intelligence and remove hard-coded reponses. 
+#This file is currently being updated to improve chatbot intelligence and remove hard-coded reponses. 
 
 #Import libraries
 import discord
