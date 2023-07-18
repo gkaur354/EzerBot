@@ -1,4 +1,4 @@
-#This chatbot application uses the trained model
+#This file is currently being updated to improve chatbot response intelligence. 
 
 #Import libraries
 import discord
